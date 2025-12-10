@@ -74,6 +74,9 @@ const SignIn = () => {
       setIsLoading(false);
     }, 800);
   };
+
+
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-950/80 p-8 shadow-xl">

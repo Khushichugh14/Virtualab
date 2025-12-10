@@ -7,34 +7,19 @@ const SESSION_KEY = "virtualrSession";   // current login session
 
 
 const CreateAccount = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    terms: false,
-  });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validate = () => {
     const newErrors = {};
-
-    if (!formData.firstName.trim()) newErrors.firstName = "First name is required";
-    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -48,10 +33,6 @@ const CreateAccount = () => {
       newErrors.password = "Password must be at least 6 characters";
     }
 
-    if (!formData.terms) {
-      newErrors.terms = "You must agree to the terms";
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -60,35 +41,41 @@ const CreateAccount = () => {
     e.preventDefault();
 
     if (!validate()) {
-      toast.error("Please fix the errors in the form.");
+      toast.error("Fix the errors and try again.");
       return;
     }
 
     setIsLoading(true);
 
     setTimeout(() => {
-      const account = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-      };
+      const storedAccount = JSON.parse(localStorage.getItem(ACCOUNT_KEY));
 
-      // save persistent account
-      localStorage.setItem(ACCOUNT_KEY, JSON.stringify(account));
+      if (!storedAccount) {
+        toast.error("No account found. Please create one.");
+        setIsLoading(false);
+        return;
+      }
 
-      // log user in (session)
-      localStorage.setItem(SESSION_KEY, JSON.stringify({ email: account.email }));
+      if (
+        storedAccount.email === formData.email &&
+        storedAccount.password === formData.password
+      ) {
+        // create login session
+        localStorage.setItem(
+          SESSION_KEY,
+          JSON.stringify({ email: storedAccount.email })
+        );
 
-      toast.success("Account created successfully!");
+        toast.success("Logged in successfully!");
+        navigate("/");
+      } else {
+        toast.error("Invalid email or password");
+      }
+
       setIsLoading(false);
-
-      navigate("/"); // home, navbar will now show Logout
     }, 800);
   };
-
   return (
-    
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-lg rounded-2xl border border-neutral-800 bg-neutral-950/80 p-8 shadow-xl">
         <h2 className="text-2xl sm:text-3xl font-semibold text-center">

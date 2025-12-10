@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 
 const HomePage = () => {
   return (
-    <div className="p-5">
+    <d>
       <HeroSection />
 
       <section id="features">
@@ -27,7 +27,7 @@ const HomePage = () => {
       </section>
 
       <Footer />
-    </div>
+    </d>
   );
 };
 

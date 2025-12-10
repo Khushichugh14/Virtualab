@@ -4,8 +4,6 @@ import logo from "../assets/logo.png";
 import { navItems } from "../constants";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const SESSION_KEY = "virtualrSession"; // ✅ Match CreateAccount & SignIn
-
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -14,15 +12,17 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const session = localStorage.getItem(SESSION_KEY);
-    setIsLoggedIn(!!session); // logged in if session exists
-  }, [location.pathname]);
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+  }, []);
 
   const handleNavClick = (path) => {
+    // safety: if for some reason no path, just ignore
     if (!path) return;
 
     setIsMenuOpen(false);
 
+    // ---- SECTION LINKS (Features / Workflow / Pricing / Testimonials) ----
     if (path.startsWith("#") || path.startsWith("/#")) {
       const sectionId = path.startsWith("#")
         ? path.slice(1)
@@ -30,12 +30,15 @@ const Navbar = () => {
 
       const scrollToSection = () => {
         const section = document.getElementById(sectionId);
-        if (section) section.scrollIntoView({ behavior: "smooth" });
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth" });
+        }
       };
 
+      // If we’re not already on home, go home then scroll
       if (location.pathname !== "/") {
         navigate("/");
-        setTimeout(scrollToSection, 150);
+        setTimeout(scrollToSection, 100);
       } else {
         scrollToSection();
       }
@@ -43,13 +46,15 @@ const Navbar = () => {
       return;
     }
 
+    // ---- NORMAL ROUTE LINKS ----
     navigate(path);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem(SESSION_KEY); // ❗ remove VR login session
+    localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
-    navigate("/create-account"); // after logout go to signup
+    // after logout go to signup (create account) page
+    navigate("/create-account");
   };
 
   return (
@@ -65,7 +70,7 @@ const Navbar = () => {
             <span className="text-white font-semibold text-lg">VirtualR</span>
           </div>
 
-          {/* Desktop nav */}
+          {/* Desktop nav links */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <button
@@ -78,7 +83,7 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Right buttons */}
+          {/* Right side buttons */}
           <div className="hidden md:flex items-center space-x-4">
             {isLoggedIn ? (
               <button
@@ -105,7 +110,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile menu toggle */}
+          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen((prev) => !prev)}

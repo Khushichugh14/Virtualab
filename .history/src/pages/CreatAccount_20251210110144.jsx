@@ -2,10 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const ACCOUNT_KEY = "virtualrAccount";   // persistent account
-const SESSION_KEY = "virtualrSession";   // current login session
-
-
 const CreateAccount = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -27,6 +23,7 @@ const CreateAccount = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
 
+    // clear error for that field
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -66,29 +63,27 @@ const CreateAccount = () => {
 
     setIsLoading(true);
 
+    // fake API delay
     setTimeout(() => {
-      const account = {
+      // save "account" to localStorage
+      const userToSave = {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
         password: formData.password,
       };
 
-      // save persistent account
-      localStorage.setItem(ACCOUNT_KEY, JSON.stringify(account));
+      localStorage.setItem("virtualrUser", JSON.stringify(userToSave));
 
-      // log user in (session)
-      localStorage.setItem(SESSION_KEY, JSON.stringify({ email: account.email }));
-
-      toast.success("Account created successfully!");
+      toast.success("Account created! Please sign in.");
       setIsLoading(false);
 
-      navigate("/"); // home, navbar will now show Logout
+      // redirect to sign in page
+      navigate("/signin");
     }, 800);
   };
 
   return (
-    
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-lg rounded-2xl border border-neutral-800 bg-neutral-950/80 p-8 shadow-xl">
         <h2 className="text-2xl sm:text-3xl font-semibold text-center">

@@ -2,18 +2,24 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const ACCOUNT_KEY = "virtualrAccount";
-const SESSION_KEY = "virtualrSession";
-
 const SignIn = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -37,43 +43,44 @@ const SignIn = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!validate()) {
-      toast.error("Fix the errors and try again.");
+  if (!validate()) {
+    toast.error("Fix the errors and try again.");
+    return;
+  }
+
+  setIsLoading(true);
+
+  setTimeout(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (!storedUser) {
+      toast.error("No account found. Please create one.");
+      setIsLoading(false);
       return;
     }
 
-    setIsLoading(true);
+    if (
+      storedUser.email === formData.email &&
+      storedUser.password === formData.password
+    ) {
+      toast.success("Logged in successfully!");
 
-    setTimeout(() => {
-      const storedAccount = JSON.parse(localStorage.getItem(ACCOUNT_KEY));
+      // Save login session
+      localStorage.setItem("user", JSON.stringify(storedUser));
 
-      if (!storedAccount) {
-        toast.error("No account found. Please create one.");
-        setIsLoading(false);
-        return;
-      }
+      navigate("/");
+    } else {
+      toast.error("Invalid email or password");
+    }
 
-      if (
-        storedAccount.email === formData.email &&
-        storedAccount.password === formData.password
-      ) {
-        // create login session
-        localStorage.setItem(
-          SESSION_KEY,
-          JSON.stringify({ email: storedAccount.email })
-        );
+    setIsLoading(false);
+  }, 800);
+};
 
-        toast.success("Logged in successfully!");
-        navigate("/");
-      } else {
-        toast.error("Invalid email or password");
-      }
-
-      setIsLoading(false);
-    }, 800);
   };
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-950/80 p-8 shadow-xl">
