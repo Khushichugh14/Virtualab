@@ -46,7 +46,7 @@ export const features = [
     short: "Deploy to staging/production instantly.",
     longDescription:
       "Automate build & deploy pipelines with a single click. Choose environment, preview build logs, and roll back easily. Integrates with GitHub, GitLab and CI providers.",
-    image: "/src/assets/features/one-click-deploy.jpg",
+    image: "/src/assets/features/",
     bullets: ["Branches & environments", "Rollback", "CI integration"],
     tags: ["CI/CD", "Deployment"],
     link: "/features/one-click-deploy"

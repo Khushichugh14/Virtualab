@@ -70,7 +70,7 @@ export const features = [
     short: "Seed, inspect and sync databases.",
     longDescription:
       "Manage local and remote databases, sync schema changes, and generate migrations automatically. Inspect rows, run queries and snapshot production data safely.",
-    image: "/src/assets/features/datanbase.sync.jpg",
+    image: "/src/assets/features/",
     bullets: ["Migrations", "Query explorer", "Snapshots"],
     tags: ["Database", "Productivity"],
     link: "/features/database-sync"

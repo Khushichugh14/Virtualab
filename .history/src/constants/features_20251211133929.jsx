@@ -106,7 +106,7 @@ export const features = [
     short: "Uptime & latency monitoring with alerts.",
     longDescription:
       "Define SLOs, track uptime and latency, and receive alerts to Slack/email when thresholds are crossed.",
-    image: "/src/assets/features/slo-monitoring.jpg",
+    image: "/src/assets/features/",
     bullets: ["Custom alerts", "Dashboards", "Historical trends"],
     tags: ["Monitoring", "SRE"],
     link: "/features/slo-monitoring"

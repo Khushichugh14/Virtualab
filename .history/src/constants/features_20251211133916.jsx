@@ -94,7 +94,7 @@ export const features = [
     short: "Keep build artifacts & logs.",
     longDescription:
       "Store build artifacts, logs and test reports per deployment so you can trace regressions and reproduce failures.",
-    image: "/src/assets/features/artirfact-storage.jpg",
+    image: "/src/assets/features/artirfact-",
     bullets: ["Retention policies", "Search logs", "Download artifacts"],
     tags: ["DevOps"],
     link: "/features/artifact-storage"

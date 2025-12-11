@@ -118,7 +118,7 @@ export const features = [
     short: "Automatic static & dependency scans.",
     longDescription:
       "Run automated security scans for vulnerabilities, suggest fixes and produce reports to meet compliance requirements.",
-    image: "/src/assets/features/security-audit.jpg",
+    image: "/src/assets/features/security-audit.jpg\",
     bullets: ["Dependency scanning", "Static analysis", "Fix suggestions"],
     tags: ["Security", "Compliance"],
     link: "/features/security-audit"

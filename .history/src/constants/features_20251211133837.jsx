@@ -58,7 +58,7 @@ export const features = [
     short: "Terminal inside the browser.",
     longDescription:
       "A secure, persistent terminal inside your workspace allowing commands, package installs, and runtime debugging without leaving the browser.",
-    image: "/src/assets/features/build-in-terminal.png",
+    image: "/src/assets/features/",
     bullets: ["Persistent sessions", "Port forwarding", "Shell access"],
     tags: ["DevTools"],
     link: "/features/built-in-terminal"

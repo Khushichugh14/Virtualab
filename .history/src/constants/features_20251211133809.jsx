@@ -34,7 +34,7 @@ export const features = [
     short: "Work together live with teammates.",
     longDescription:
       "Share a development session with teammates: live cursors, shared terminals, and synchronized previews. Ideal for pair programming, design reviews, and remote onboarding.",
-    image: "/src/assets/features/real-time-collab.jpg",
+    image: "/src/assets/features/",
     bullets: ["Live cursors", "Shared terminals", "Session recording"],
     tags: ["Collaboration", "Teams"],
     link: "/features/realtime-collab"

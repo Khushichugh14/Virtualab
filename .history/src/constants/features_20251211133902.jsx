@@ -82,7 +82,7 @@ export const features = [
     short: "Find hotspots & optimize.",
     longDescription:
       "Profile CPU and memory usage, visualize flamegraphs and get recommendations to reduce latency and resource use.",
-    image: "/src/assets/features/code-performance.jpg",
+    image: "/src/assets/features/\",
     bullets: ["Flamegraphs", "Memory snapshots", "Actionable tips"],
     tags: ["Performance"],
     link: "/features/code-performance"

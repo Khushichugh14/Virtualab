@@ -18,7 +18,7 @@ export const features = [
     short: "Autocomplete, refactors & smart snippets.",
     longDescription:
       "Context-aware AI suggestions that complete your code, propose refactors, and generate tests. Save developer time by letting the editor handle repetitive patterns while you focus on design and architecture.",
-    image: "/src/assets/features/ai-suggestion.jpg",
+    image: "/src/assets/features/",
     bullets: [
       "Contextual code completion",
       "Refactor suggestions",
