@@ -1,0 +1,33 @@
+// App.jsx
+import Navbar from "./components/Navbar";
+
+import StartFree from "./pages/StartFree";
+import Documentation from "./pages/Documentation";
+import CreateAccount from "./pages/CreatAccount";
+import SignIn from "./pages/SignIn";
+
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+
+const App = () => {
+  return (
+    <>
+      <Navbar />
+
+      <Routes>
+        {/* Landing page */}
+        <Route path="/" element={<HomePage />} />
+
+        {/* Other pages */}
+        <Route path="/start-free" element={<StartFree />} />
+        <Route path="/documentation" element={<Documentation />} />
+        <Route path="/create-account" element={<CreateAccount />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/features" element={<FeaturePage />} />
+<Route path="/features/:id" element={<FeatureDetail />} />
+      </Routes>
+    </>
+  );
+};
+
+export default App;
