@@ -1,5 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { pricingOptions } from "../constants";
 
 const Pricing = () => {
   const navigate = useNavigate();
@@ -79,5 +79,5 @@ const Pricing = () => {
     </section>
      );
 };
-}
+
 export default Pricing;

@@ -1,6 +1,8 @@
+// src/pages/CheckoutPage.jsx
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 
+/* Demo plans fallback (use your central plans list if available) */
 const demoPlans = [
   {
     id: "plan_free",
@@ -25,12 +27,13 @@ const demoPlans = [
   },
 ];
 
+/* tiny helper to generate a readable transaction id */
 const genTxn = () => {
   const n = Math.floor(Math.random() * 90000000) + 10000000; // 8 digits
   return `${Date.now().toString().slice(-6)}${n.toString().slice(0, 5)}`;
 };
 
-const Checkout = () => {
+const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 

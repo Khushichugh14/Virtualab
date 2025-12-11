@@ -1,6 +1,8 @@
+// src/pages/CheckoutPage.jsx
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 
+/* Demo plans fallback (use your central plans list if available) */
 const demoPlans = [
   {
     id: "plan_free",

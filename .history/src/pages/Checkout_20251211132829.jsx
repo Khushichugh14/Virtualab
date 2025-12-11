@@ -1,39 +1,21 @@
+// src/pages/CheckoutPage.jsx
 import { useLocation, useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
-const demoPlans = [
-  {
-    id: "plan_free",
-    title: "Free",
-    priceMonthly: 0,
-    description: "Good for personal use and testing out features.",
-    features: ["Private board sharing", "5 Gb Storage", "Web Analytics", "Private Mode"],
-  },
-  {
-    id: "plan_pro",
-    title: "Pro",
-    priceMonthly: 10,
-    description: "For small teams who need collaboration and analytics.",
-    features: ["Private board sharing", "10 Gb Storage", "Web Analytics (Advanced)", "Priority support"],
-  },
-  {
-    id: "plan_enterprise",
-    title: "Enterprise",
-    priceMonthly: 200,
-    description: "Custom pricing for large organisations and SLAs.",
-    features: ["Custom seats", "SLA", "Dedicated support", "Unlimited Storage"],
-  },
-];
+/**
+ * This checkout page reads the selected plan from:
+ * 1) location.state.plan (preferred)
+ * 2) querystring planId (fallback) - attempt to find a matching plan from the list (if you import plans)
+ *
+ * For simplicity, this example expects location.state.plan. If not found, it shows a friendly message.
+ */
 
-const genTxn = () => {
-  const n = Math.floor(Math.random() * 90000000) + 10000000; // 8 digits
-  return `${Date.now().toString().slice(-6)}${n.toString().slice(0, 5)}`;
-};
 
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Try to read plan from state first, then fallback to query param
   const statePlan = location.state?.plan || null;
   const planIdFromQuery = new URLSearchParams(location.search).get("planId");
   const planId = statePlan?.id || planIdFromQuery || null;
@@ -48,8 +30,8 @@ const Checkout = () => {
   const [card, setCard] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // success state (stores txn details)
-  const [successData, setSuccessData] = useState(null);
+  // success popup state
+  const [successOpen, setSuccessOpen] = useState(false);
 
   // error state simple
   const [error, setError] = useState("");
@@ -73,25 +55,17 @@ const Checkout = () => {
     setLoading(true);
 
     try {
-      // simulate processing delay
+      // Simulate payment processing delay
       await new Promise((res) => setTimeout(res, 900));
 
-      // Build success payload
-      const txn = genTxn();
-      const amountPaid = plan?.priceMonthly ?? 0; // example: monthly amount
-      const provider = "Paytm"; // change to actual provider if available
-      const timestamp = new Date().toISOString();
+      // Show success popup
+      setSuccessOpen(true);
 
-      setSuccessData({
-        txn,
-        amountPaid,
-        provider,
-        email,
-        timestamp,
-      });
+      // Optionally: save subscription to server here
+      // await api.subscribe({ planId: plan.id, email, card });
 
-      // Optionally persist subscription to server here.
-
+      // Optionally redirect after a short delay (uncomment to enable)
+      // setTimeout(() => navigate("/dashboard"), 2200);
     } catch (err) {
       setError("Payment failed. Please try again.");
     } finally {
@@ -118,59 +92,6 @@ const Checkout = () => {
     );
   }
 
-  /* If successData exists, show the receipt-like confirmation (single CTA: Back to Home) */
-  if (successData) {
-    return (
-      <main className="min-h-screen bg-black text-black flex items-center justify-center px-6 py-24">
-        <div className="max-w-md w-full bg-white rounded-2xl p-8 text-center shadow-lg">
-          {/* big green circle with check */}
-          <div className="flex justify-center mb-6">
-            <div className="rounded-full bg-green-50 p-8">
-              <div className="w-20 h-20 rounded-full bg-green-400 flex items-center justify-center">
-                <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <h2 className="text-2xl font-semibold mb-2">Payment Successful!</h2>
-          <p className="text-neutral-600 mb-6">Your subscription is now active.</p>
-
-          <div className="text-neutral-700 text-sm mb-4">
-            <div className="mb-3">
-              <span className="block text-neutral-500">Transaction Number :</span>
-              <span className="block font-medium text-neutral-900">{successData.txn}</span>
-            </div>
-
-            <div className="mb-3">
-              <span className="block text-neutral-500">Amount paid</span>
-              <span className="block font-medium text-neutral-900">${successData.amountPaid.toFixed(2)}</span>
-            </div>
-
-            <div className="mb-4">
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="text-blue-600 underline"
-              >
-                {successData.provider}
-              </a>
-            </div>
-          </div>
-
-          <button
-            onClick={() => navigate("/")}
-            className="w-full inline-block px-4 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800"
-          >
-            Back to Home
-          </button>
-        </div>
-      </main>
-    );
-  }
-
-  /* default checkout form */
   return (
     <main className="min-h-screen bg-black text-white py-20 px-6">
       <div className="max-w-3xl mx-auto">
@@ -209,7 +130,7 @@ const Checkout = () => {
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 rounded bg-neutral-800 border border-neutral-700 text-white"
+                className="w-full p-3 rounded bg-neutral-800 border border-neutral-700"
                 placeholder="you@company.com"
                 type="email"
               />
@@ -220,7 +141,7 @@ const Checkout = () => {
               <input
                 value={card}
                 onChange={(e) => setCard(e.target.value)}
-                className="w-full p-3 rounded bg-neutral-800 border border-neutral-700 text-white"
+                className="w-full p-3 rounded bg-neutral-800 border border-neutral-700"
                 placeholder="4242 4242 4242 4242"
               />
             </label>
@@ -247,8 +168,64 @@ const Checkout = () => {
           <p>By subscribing you agree to the Terms of Service and Billing Policies.</p>
         </div>
       </div>
+
+      {/* SUCCESS POPUP */}
+      {successOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="w-full max-w-md bg-neutral-900 rounded-2xl p-6 border border-neutral-700 text-center transform transition-all">
+            <div className="flex items-center justify-center mb-4">
+              {/* green check svg */}
+              <div className="bg-green-500 rounded-full w-12 h-12 flex items-center justify-center mr-3">
+                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+
+              <div className="text-left">
+                <h2 className="text-xl font-bold">Payment Successful!</h2>
+                <p className="text-neutral-300 text-sm mt-1">Your subscription is now active.</p>
+              </div>
+            </div>
+
+            <p className="text-neutral-400 mb-6">
+              A confirmation email will be sent to <span className="text-white font-medium">{email}</span>.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setSuccessOpen(false);
+                  // optional immediate redirect to dashboard
+                  // navigate("/dashboard");
+                }}
+                className="flex-1 px-4 py-2 bg-neutral-800 rounded"
+              >
+                Close
+              </button>
+
+              <button
+                onClick={() => {
+                  // Example: go to invoices / subscription page
+                  setSuccessOpen(false);
+                  navigate("/dashboard/subscriptions");
+                }}
+                className="flex-1 px-4 py-2 bg-orange-600 rounded text-black"
+              >
+                View subscription
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 };
 
-export default Checkout;
+export default CheckoutPage;
+If you want, I can:
+
+add a small confetti anim

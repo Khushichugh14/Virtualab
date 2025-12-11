@@ -1,4 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
+import { pricingOptions } from "../constants";
 import { useNavigate } from "react-router-dom";
 
 const Pricing = () => {
